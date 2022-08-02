@@ -44,6 +44,41 @@ Gitea service can be accessed using the url <http://localhost:30950/>
 
 The default credentials is `demo/demo@123`
 
+### Setup Workshop
+
+Create workshop config file like,
+
+```yaml
+# The Gitea Configuration
+giteaAdminUserName: demo
+giteaAdminUserPassword: demo@123
+giteaURL: http://gitea-127.0.0.1.sslip.io:30950/
+users:
+  # the lower bound of user e.g. user-01
+  from: 1
+  # the upper bound of user e.g. user-10
+  to: 2
+  # create Gitea oAuth app for user
+  oAuthAppName: demo-oauth
+  # oAuth redirect URL
+  oAuthRedirectURI: https://drone-127.0.0.1.sslip.io:30980
+  # add oAuth App ClientID and ClientSecret to Kubernetes Secret
+  addKubernetesSecret: true
+  # The Namespace where to create the secret, the secret will 
+  # use the format demo-oauth-<username>-secret
+  secretNamespace: default
+  repos:
+    - https://github.com/kameshsampath/jar-stack
+```
+
+Run the command,
+
+```shell
+go run cmd/main.go setup-workshop --workshop-file <path to the workshop config> -k <path to kubeconfig>
+```
+
+__TODO__: Release of binaries and kubernetes jobs to do this w/o manually running the command
+
 ## Clean up
 
 ```shell
