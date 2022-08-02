@@ -1,20 +1,11 @@
 package commands
 
 import (
-	"context"
 	"fmt"
 
-	"github.com/kameshsampath/drone-tutorial-gitea-helper/pkg/utils"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-
-	"code.gitea.io/sdk/gitea"
-	apiv1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/rest"
-	"k8s.io/client-go/tools/clientcmd"
 )
 
 //OAuthAppOptions to hold the options to create oauth application
@@ -77,104 +68,21 @@ func (opts *OAuthAppOptions) AddFlags(cmd *cobra.Command) {
 
 // Execute implements Command
 func (opts *OAuthAppOptions) Execute(cmd *cobra.Command, args []string) error {
-	c, err := gitea.NewClient(opts.giteaURL)
-	c.SetBasicAuth(opts.giteaAdminUser, opts.giteaAdminPassword)
+	wopts := &WorkshopOptions{
+		GiteaURL:           opts.giteaURL,
+		GiteaAdminUser:     opts.giteaAdminUser,
+		GiteaAdminPassword: opts.giteaAdminPassword,
+	}
+	c, err := wopts.newGiteaClient()
 	if err != nil {
 		return err
 	}
 
-	oAuthApps, _, err := c.ListOauth2(gitea.ListOauth2Option{})
+	_, err = opts.createOAuthApp(c)
 
 	if err != nil {
 		return err
 	}
-
-	var appExists = false
-	var oAuthApp *gitea.Oauth2
-	for _, oAuthApp = range oAuthApps {
-		if oAuthApp.Name == opts.oAuthAppName {
-			appExists = true
-			break
-		}
-	}
-
-	if !appExists {
-		log.Debugln("Creating new oAuth App")
-
-		o, _, err := c.CreateOauth2(gitea.CreateOauth2Option{
-			RedirectURIs: []string{fmt.Sprintf("%s/login", opts.appRedirectURL)},
-			Name:         opts.oAuthAppName})
-		if err != nil {
-			return err
-		}
-
-		if opts.addKubernetesSecret {
-			err = opts.generateKubernetesSecret(o)
-
-			if err != nil {
-				return err
-			}
-		}
-		log.Infof("\nSuccessfully created oAuth application %s\n", opts.oAuthAppName)
-		log.Infof("\noAuth application %s ClientID:%s ClientSecret:%s\n", opts.oAuthAppName, o.ClientID, o.ClientSecret)
-	} else {
-		log.Infof("\noAuth app %s already exists, updating", opts.oAuthAppName)
-		_, _, err := c.UpdateOauth2(oAuthApp.ID,
-			gitea.CreateOauth2Option{
-				RedirectURIs: []string{fmt.Sprintf("%s/login", opts.appRedirectURL)},
-				Name:         opts.oAuthAppName,
-			})
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-// generateKubernetesSecret generates a Kubernetes secret
-// for the oAuth Application and stores the ClientID and ClientSecret in it.
-// The default name of the secret is <oauth-app-name>-secret
-func (opts *OAuthAppOptions) generateKubernetesSecret(o *gitea.Oauth2) error {
-	var config *rest.Config
-	var err error
-	if opts.kubeconfig != "" {
-		config, err = clientcmd.BuildConfigFromFlags("", opts.kubeconfig)
-		if err != nil {
-			return err
-		}
-		log.Debugln("Using out of Cluster Config")
-	} else {
-		config, err = rest.InClusterConfig()
-		if err != nil {
-			return err
-		}
-		log.Debugln("Using InCluster Config")
-	}
-
-	clientset, err := kubernetes.NewForConfig(config)
-	if err != nil {
-		return err
-	}
-
-	log.Debugln("Got Client Set")
-
-	sec, _ := utils.RandomHex(16)
-
-	_, err = clientset.CoreV1().Secrets(opts.namespace).Create(context.TODO(), &apiv1.Secret{
-		ObjectMeta: metav1.ObjectMeta{
-			Name: fmt.Sprintf("%s-secret", opts.oAuthAppName),
-		},
-		StringData: map[string]string{
-			"DRONE_GITEA_CLIENT_ID":     o.ClientID,
-			"DRONE_GITEA_CLIENT_SECRET": o.ClientSecret,
-			"DRONE_RPC_SECRET":          sec,
-		},
-	}, metav1.CreateOptions{})
-
-	if err != nil {
-		return err
-	}
-
 	return nil
 }
 
