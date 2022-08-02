@@ -40,7 +40,7 @@ helm upgrade \
   --wait
 ```
 
-Gitea service can be accessed using the url <http://localhost:30950/>
+Gitea service can be accessed using the url <http://gitea-127.0.0.1.sslip.io:30950/>
 
 The default credentials is `demo/demo@123`
 
