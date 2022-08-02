@@ -1,0 +1,17 @@
+coverage:
+  status:
+    project:
+      default:
+        target: 50
+        threshold: 1%
+comment:
+  behavior: default
+ignore:
+  - "**/zz_generated*.go" # Ignore generated files.
+  - "**/*.pb.go" # Ignore proto-generated files.
+  - "cmd/"
+  - "hack"
+  - "pkg/client"
+  - "test"
+  - "third_party"
+  - "vendor"

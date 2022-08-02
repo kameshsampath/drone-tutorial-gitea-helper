@@ -1,0 +1,6 @@
+{
+	"cSpell.words": [
+		"gitea"
+	],
+	"go.lintTool": "golangci-lint"
+}

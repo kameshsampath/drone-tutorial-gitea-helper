@@ -1,0 +1,45 @@
+before:
+  hooks:
+    - go mod download
+    - go mod tidy
+builds:
+  - id: "gitea-helper"
+    main: cmd/main.go
+    binary: gitea-helper
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    flags:
+      - -mod=vendor
+    ldflags:
+      - '-X github.com/kameshsampath/drone-tutorial-gitea-helper/pkg/commands.Version={{.Version}}'
+      - '-X github.com/kameshsampath/drone-tutorial-gitea-helper/pkg/commands.BuildDate={{.Date}}'
+      - '-X github.com/kameshsampath/drone-tutorial-gitea-helper/pkg/commands.Commit={{.Commit}}'
+      - '-X github.com/kameshsampath/drone-tutorial-gitea-helper/pkg/commands.BuiltBy=goreleaser'
+archives:
+  - replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+    name_template: "gitea-helper_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    files:
+      - LICENSE
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+release:
+  draft: false
+  prerelease: "true"
+  name_template: "Release {{ .Tag }}"

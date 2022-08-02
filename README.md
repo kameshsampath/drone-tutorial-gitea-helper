@@ -1,0 +1,51 @@
+# Gitea API Helpers
+
+A set of helpers to interact and configure [Gitea](https://gitea.io/en-us/) using [Gitea API](https://docs.gitea.io/en-us/api-usage/). The helper also has set of Kubernetes jobs that could be used to configure the Gitea using Kubernetes jobs
+
+> __NOTE__: This is intended only for Demo purpose and currently developed to be used with Drone CI
+
+## Required tools
+
+- [Kustomize](https://kustomize.io/)
+- [envsusbst](https://www.man7.org/linux/man-pages/man1/envsubst.1.html)
+
+All linux distributions adds **envsubst** via [gettext](https://www.gnu.org/software/gettext/) package. On macOS it can be installed using [Homebrew](https://brew.sh/) like `brew install gettext`.
+
+## Clone the Sources
+
+```shell
+git clone https://github.com/kameshsampath/gitea-api-helper && \
+  cd "$(basename "$_" .git)"
+export GITEA_HELPER_HOME="${PWD}"
+```
+
+## Build and Test locally
+
+The following section details on how to build and test the helper locally.
+
+### Create Kubernetes Cluster
+
+```shell
+$GITEA_HELPER_HOME/bin/kind.sh
+```
+
+### Deploy Gitea
+
+```shell
+helm repo add gitea-charts https://dl.gitea.io/charts/
+helm repo update
+helm upgrade \
+  --install gitea gitea-charts/gitea \
+  --values $GITEA_HELPER_HOME/helm_vars/gitea/values.yaml \
+  --wait
+```
+
+Gitea service can be accessed using the url <http://localhost:30950/>
+
+The default credentials is `demo/demo@123`
+
+## Clean up
+
+```shell
+ kind delete cluster --name=gitea-dev
+```
