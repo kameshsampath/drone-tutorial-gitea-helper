@@ -61,7 +61,7 @@ kind: Kustomization
 
 namespace: drone
 resources:
-- https://raw.githubusercontent.com/kameshsampath/drone-tutorial-gitea-helper/master/manifests/ha/install.yaml
+- https://github.com/kameshsampath/drone-tutorial-gitea-helper/blob/main/manifests/install.yaml
 ## add your overrides
 ```
 
