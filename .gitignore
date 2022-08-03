@@ -10,3 +10,4 @@ NOTES.txt
 coverage.txt
 dist
 release
+.secrets*

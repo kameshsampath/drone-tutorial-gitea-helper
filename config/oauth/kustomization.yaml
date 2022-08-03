@@ -1,2 +1,8 @@
 resources:
-  - "oauth-app-job.yaml"
+  - "workshop-setup-job.yaml"
+generatorOptions:
+  disableNameSuffixHash: true
+configMapGenerator:
+    - files:
+        - "workshop.yaml"
+      name: workshop-config

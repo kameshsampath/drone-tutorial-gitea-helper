@@ -49,7 +49,7 @@ func (opts *OAuthAppOptions) createOAuthApp(c *gitea.Client) (*gitea.Oauth2, err
 			}
 		}
 		log.Infof("\nSuccessfully created oAuth application %s\n", opts.oAuthAppName)
-		log.Infof("\noAuth application %s ClientID:%s ClientSecret:%s\n", opts.oAuthAppName, oAuthApp.ClientID, oAuthApp.ClientSecret)
+		log.Debugf("\noAuth application %s ClientID:%s ClientSecret:%s\n", opts.oAuthAppName, oAuthApp.ClientID, oAuthApp.ClientSecret)
 	} else {
 		log.Infof("\noAuth app %s already exists, updating", opts.oAuthAppName)
 		oAuthApp, _, err = c.UpdateOauth2(oAuthApp.ID,
@@ -113,7 +113,7 @@ func (opts *OAuthAppOptions) generateKubernetesSecret(o *gitea.Oauth2) error {
 	if err != nil {
 		return err
 	}
-
+	log.Infof("Created Kubernetes secret %s", opts.oAuthAppName)
 	return nil
 }
 
@@ -137,9 +137,9 @@ func createRepo(c *gitea.Client, githubTemplateRepo, user, repoName string) erro
 		if err != nil {
 			return err
 		}
-		log.Infof("Repo %s successfully created, you can clone via %s", newR.Name, repo.CloneURL)
+		log.Infof("Repo %s successfully created for user %s, you can clone via %s", newR.Name, user, repo.CloneURL)
 	} else {
-		log.Infof("Repo %s already exists skipping creation,you can clone via %s", repo.Name, repo.CloneURL)
+		log.Infof("Repo %s already exists for user %s skipping creation,you can clone via %s", repo.Name, user, repo.CloneURL)
 	}
 
 	return nil

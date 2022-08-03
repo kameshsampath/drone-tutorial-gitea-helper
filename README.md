@@ -46,6 +46,19 @@ The default credentials is `demo/demo@123`
 
 ### Setup Workshop
 
+### Kubernetes Cluster
+
+Assuming you have
+
+* Kubernetes Cluster with cluster-admin privileges
+* Gitea deployed and running
+  
+```shell
+
+```
+
+#### Locally
+
 Create workshop config file like,
 
 ```yaml

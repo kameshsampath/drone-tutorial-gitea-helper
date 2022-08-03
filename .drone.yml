@@ -1,0 +1,13 @@
+### TODO 
+kind: pipeline
+type: docker
+name: default
+
+steps:
+    - name: build
+      image: golang:1.18.5-alpine3.16
+      commands:
+        - 
+      environment:
+        GITHUB_TOKEN:
+          from_secret: github_token

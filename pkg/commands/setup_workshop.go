@@ -115,7 +115,7 @@ func (opts *WorkshopOptions) createUsers(kubeconfig string) ([]*gitea.User, erro
 		userPassword := fmt.Sprintf("user-%02d@123", i)
 
 		if u, _, err := c.GetUserInfo(userName); u != nil && err == nil {
-			log.Debugf("User %s already exists", u.UserName)
+			log.Infof("User %s already exists", u.UserName)
 			continue
 		}
 
@@ -136,7 +136,7 @@ func (opts *WorkshopOptions) createUsers(kubeconfig string) ([]*gitea.User, erro
 		if err != nil {
 			return nil, err
 		}
-		log.Debugf("Created user with username %s", u.UserName)
+		log.Infof("Created user with username %s", u.UserName)
 		gusers = append(gusers, u)
 
 		//Create oAuth2 App
@@ -146,7 +146,7 @@ func (opts *WorkshopOptions) createUsers(kubeconfig string) ([]*gitea.User, erro
 			oAuthAppName:        fmt.Sprintf("%s-user-%02d", giteaUsers.OAuthAppName, i),
 			appRedirectURL:      fmt.Sprintf("%s/login", giteaUsers.OAuthRedirectURI),
 			addKubernetesSecret: giteaUsers.AddKubernetesSecret,
-			namespace:           giteaUsers.Namespace,
+			namespace:           giteaUsers.SecretNamespace,
 			kubeconfig:          kubeconfig,
 		}
 

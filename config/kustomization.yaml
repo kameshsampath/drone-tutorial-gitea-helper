@@ -1,3 +1,8 @@
+namespace: drone
+
+commonLabels:
+  app.kubernetes.io/version: devel
+
 resources:
   - "namespace.yaml"
   - "sa.yaml"
