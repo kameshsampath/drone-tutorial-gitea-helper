@@ -7,11 +7,7 @@ readonly YAML_REPO_ROOT=${1:?"First argument must be the repo root dir"}
 readonly YAML_OUTPUT_DIR=${2:?"Second argument must be the dist dir"}
 readonly TAG=${3:?"Third argument must be the tag"}
 
-KO_YAML_FLAGS="--bare --tags=${TAG}"
-
-if [[ "${KO_FLAGS}" != *"--platform"* ]]; then
-  KO_YAML_FLAGS="${KO_YAML_FLAGS} --platform=linux/amd64,linux/arm64"
-fi
+KO_YAML_FLAGS="-B --tags=${TAG} --platform=linux/amd64,linux/arm64"
 
 # Set output directory
 if [[ -z "${YAML_OUTPUT_DIR:-}" ]]; then
@@ -36,8 +32,7 @@ else
   LABEL_YAML_CMD=(cat)
 fi
 
-: ${KO_DOCKER_REPO:="ko.local"}
-export KO_DOCKER_REPO
+export KO_DOCKER_REPO="docker.io/kameshsampath"
 
 cd "${YAML_REPO_ROOT}"
 

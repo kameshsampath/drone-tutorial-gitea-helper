@@ -3,9 +3,9 @@ before:
     - go mod download
     - go mod tidy
 builds:
-  - id: "gitea-helper"
-    main: cmd/main.go
-    binary: gitea-helper
+  - id: "drone-tutorial-gitea-helper"
+    main: cmd/drone-tutorial-gitea-helper/main.go
+    binary: drone-tutorial-gitea-helper
     env:
       - CGO_ENABLED=0
     goos:
@@ -26,9 +26,11 @@ archives:
       windows: Windows
       386: i386
       amd64: x86_64
-    name_template: "gitea-helper_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    name_template: "drone-tutorial-gitea-helper_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     files:
       - LICENSE
+      - README.md
+      - manifests/*
 checksum:
   name_template: 'checksums.txt'
 snapshot:

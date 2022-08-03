@@ -18,7 +18,7 @@ $(eval IMAGE_TAG := $(shell svu next))
 endif
 	
 build:	## Build the app
-	goreleaser build --snapshot --rm-dist --single-target --debug
+	goreleaser build --snapshot --rm-dist --debug
 
 test:	## Run Tests
 	./hack/test.sh

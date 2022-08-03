@@ -48,13 +48,29 @@ The default credentials is `demo/demo@123`
 
 ### Kubernetes Cluster
 
-Assuming you have
+Assuming you have,
 
-* Kubernetes Cluster with cluster-admin privileges
-* Gitea deployed and running
-  
+- Kubernetes Cluster with cluster-admin privileges
+- Gitea deployed and running
+
+Create a `kustomization` file like
+
+```yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: drone
+resources:
+- https://raw.githubusercontent.com/kameshsampath/drone-tutorial-gitea-helper/master/manifests/ha/install.yaml
+## add your overrides
+```
+
+__TIP__: This can be useful if you want to override the `workshop.yaml` to suit your settings
+
+Then do,
+
 ```shell
-
+kubectl apply -k <your kustomize dir>
 ```
 
 #### Locally
