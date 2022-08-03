@@ -46,6 +46,7 @@ build-image: ## builds the container image
 	./hack/generate_yamls.sh $(CURRENT_DIR) $(CURRENT_DIR)/manifests $(IMAGE_TAG)
 
 pre-release:	build-image## builds the pre-release container image with $PRE_RELEASE_SUFFIX
+	goreleaser release
 
 release:	build-image## does a GA release
 
