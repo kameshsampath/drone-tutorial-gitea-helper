@@ -38,3 +38,7 @@ cd "${YAML_REPO_ROOT}"
 
 echo "Building Drone Tutorial Workshop Helper Kubernetes Manifests"
 kustomize build config | ko resolve ${KO_YAML_FLAGS} -R -f - | "${LABEL_YAML_CMD[@]}" > "${INSTALL_YAML}"
+
+git commit manifests -m "chore: Release ${TAG}"
+git tag "$(IMAGE_TAG)"
+git push --tags

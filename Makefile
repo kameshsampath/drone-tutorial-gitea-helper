@@ -45,13 +45,13 @@ clean:	## Cleans the build and release directory
 build-image: ## builds the container image
 	./hack/generate_yamls.sh $(CURRENT_DIR) $(CURRENT_DIR)/manifests $(IMAGE_TAG)
 
-pre-release:	build-image git-tag	## builds the pre-release container image with $PRE_RELEASE_SUFFIX
+pre-release:	build-image## builds the pre-release container image with $PRE_RELEASE_SUFFIX
 
-release:	build-image	git-tag	## does a GA release
+release:	build-image## does a GA release
 
-git-tag:	
-	git tag "$(IMAGE_TAG)"
-	git push --tags
+# git-tag:	
+# 	git tag "$(IMAGE_TAG)"
+# 	git push --tags
 
 help: ## Show this help
 	@echo Please specify a build target. The choices are:
