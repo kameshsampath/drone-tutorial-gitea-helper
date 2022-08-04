@@ -75,7 +75,7 @@ spec:
             - setup-workshop
             - --workshop-file=/config/workshop.yaml
             - --verbose=debug
-          image: docker.io/kameshsampath/drone-tutorial-gitea-helper:v0.1.0@sha256:65d3547bb9ad2c825d0fc83ae52586b0abcf96468aa19993dc202f76b0abcef8
+          image: docker.io/kameshsampath/drone-tutorial-gitea-helper:v0.1.0@sha256:dae5b706848284c568b4faa95dad90457feb985d5a80992b3d86d135af2da702
           name: gitea-configurer
           volumeMounts:
             - mountPath: /config
