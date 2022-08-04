@@ -10,7 +10,7 @@ users:
   # create Gitea oAuth app for user
   oAuthAppName: demo-oauth
   # oAuth redirect URL
-  oAuthRedirectURI: https://drone-127.0.0.1.sslip.io:30980
+  oAuthRedirectURI: http://drone-127.0.0.1.sslip.io:30980
   # add oAuth App ClientID and ClientSecret to Kubernetes Secret
   addKubernetesSecret: true
   # The Namespace where to create the secret, the secret will 

@@ -54,7 +54,7 @@ func (opts *OAuthAppOptions) createOAuthApp(c *gitea.Client) (*gitea.Oauth2, err
 		log.Infof("\noAuth app %s already exists, updating", opts.oAuthAppName)
 		oAuthApp, _, err = c.UpdateOauth2(oAuthApp.ID,
 			gitea.CreateOauth2Option{
-				RedirectURIs: []string{fmt.Sprintf("%s/login", opts.appRedirectURL)},
+				RedirectURIs: []string{opts.appRedirectURL},
 				Name:         opts.oAuthAppName,
 			})
 		if err != nil {
