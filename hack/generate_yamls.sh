@@ -46,5 +46,5 @@ EOF
 
 # do git commit and tag
 git commit manifests -m "chore: Release ${TAG}"
-git tag "$(TAG)"
+git tag "${TAG}"
 git push --tags

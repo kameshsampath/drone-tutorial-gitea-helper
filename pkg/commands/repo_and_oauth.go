@@ -35,7 +35,7 @@ func (opts *OAuthAppOptions) createOAuthApp(c *gitea.Client) (*gitea.Oauth2, err
 		log.Debugln("Creating new oAuth App")
 
 		oAuthApp, _, err := c.CreateOauth2(gitea.CreateOauth2Option{
-			RedirectURIs: []string{fmt.Sprintf("%s/login", opts.appRedirectURL)},
+			RedirectURIs: []string{opts.appRedirectURL},
 			Name:         opts.oAuthAppName})
 		if err != nil {
 			return nil, err
